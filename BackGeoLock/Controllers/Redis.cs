@@ -10,18 +10,29 @@ namespace BackGeoLock.Controllers
 {
     public static class Redis
     {
-        private static readonly RedisClient redisClient = new RedisClient("163.172.144.237", 6379, "master123", 0);
+        
         public static void addLocalisation(Localisation localisation)
-        {             
+        {
+            string host = "163.172.144.237";
+            string elementKey = "master123";
+            using (RedisClient redisClient = new RedisClient(host, 6379,elementKey))
+            {
+                
                 IRedisTypedClient<Localisation> localisationRedis = redisClient.As<Localisation>();
                 IRedisList<Localisation> listUser = localisationRedis.Lists[$"Localisation:{localisation.pseudo}"];
                 //expire list 5h
                 redisClient.Custom("EXPIRE", $"Localisation:{localisation.pseudo}", "18000");
                 listUser.Add(localisation);
-              
+               
+            }
         }
         public static List<Localisation> GetLocalisations()
         {
+            string host = "163.172.144.237";
+            string elementKey = "master123";
+            using (RedisClient redisClient = new RedisClient(host, 6379, elementKey, 0))
+            {
+
                 IRedisTypedClient<Localisation> localisationRedis = redisClient.As<Localisation>();
                 List<string> keys = redisClient.GetAllKeys();
                 List<Localisation> listLastLoc = new List<Localisation>();
@@ -31,8 +42,9 @@ namespace BackGeoLock.Controllers
                     listLastLoc.Add(lastLoc);
                     
                 }
+                
                 return listLastLoc;
-            
+            }
         }
 
     }
