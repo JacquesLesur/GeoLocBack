@@ -18,7 +18,6 @@ namespace BackGeoLock.Controllers
     {
         // GET: api/Localisation
         [HttpGet("{longitude}/{latitude}")]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public List<Localisation> Get(string longitude, string latitude)
         {
             
@@ -45,7 +44,6 @@ namespace BackGeoLock.Controllers
        
         // GET: api/Localisation
         [HttpGet]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public List<Localisation> Get()
         {
             return Redis.GetLocalisations();
@@ -53,7 +51,6 @@ namespace BackGeoLock.Controllers
         
         // POST: api/Localisation
         [HttpPost]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public void Post([FromBody]Localisation localisation)
         {
 
